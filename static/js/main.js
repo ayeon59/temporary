@@ -17,6 +17,17 @@ function guessMoney(id){
         type:"POST",
         url:"/apply",
         data:{appPrice:money ,userId:id},
+
+        beforeSend: function (xhr) {
+            const token = localStorage.getItem('jwt_token');
+            if (token) {
+                xhr.setRequestHeader('Authorization', token);
+            }
+        },
+        error: function (xhr) {
+           // xhr.responseJSON
+        },
+
         success:function(response){
             if(response["result"]=="success"){
                 alert("도전 성공")
@@ -61,6 +72,16 @@ function addEveryDayTicket(){
         type:"POST",
         url:"/api/freeEveryTicket",
         data:{userId:id},
+
+        beforeSend: function (xhr) {
+            const token = localStorage.getItem('jwt_token');
+            if (token) {
+                xhr.setRequestHeader('Authorization', token);
+            }
+        },
+        error: function (xhr) {
+           // xhr.responseJSON
+        },
         success:function(response){
             if(response["result"]=="success"){
                 updateTicketCount();
@@ -78,6 +99,16 @@ function addCommitTicket(){
         type:"POST",
         url:"/api/freeCommitTicket",
         data:{userId:id},
+
+        beforeSend: function (xhr) {
+            const token = localStorage.getItem('jwt_token');
+            if (token) {
+                xhr.setRequestHeader('Authorization', token);
+            }
+        },
+        error: function (xhr) {
+           // xhr.responseJSON
+        },
         success:function(response){
             if(response["result"]=="success"){
                 updateTicketCount();

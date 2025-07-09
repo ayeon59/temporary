@@ -63,7 +63,7 @@ function postMember() {
         }
     });
 }
-//로그인 성공한 경우 서버에 유저에 대한 정보넘김 
+
 function loginSuccess(){
     let user_id = $("#user-id").val()
     let user_password = $("#user-password").val()
