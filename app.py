@@ -235,24 +235,27 @@ def main(current_user_id):
     user = db.user.find_one({'id': current_user_id})
     
     #appList
-    appList = user['appList']
+    appList = user.get('appList', [])
     for app in appList:
         app['appDate'] = app['appDate'].isoformat()
 
     #consecutiveDay, attendanceList
     consecutiveDay = calcConsecutiveAttendance(user)
     #줘야되는 형식[{'dateTime': datetime,'level': int}]
-    atdList = user['attendanceList']
-    attendanceList = [
-        {
-            'dateTime': item['dateTime'].isoformat(),
-            'level': int(item['isAttendance'])
-        }
-        for item in atdList
-    ]
+    atdList = user.get('attendanceList', [])
+    if atdList:
+        attendanceList = [
+            {
+                'dateTime': item['dateTime'].isoformat(),
+                'level': int(item['isAttendance'])
+            }
+            for item in atdList
+        ]
+    else:
+        attendanceList = []
 
     #appTicket
-    appTicket = user['appTicket']
+    appTicket = user.get('appTicket', 0)
 
     #productName(나중에 이미지로), minPrice, maxPrice
     #응모 마감일이 오늘 23:59:59.999999 = 현재 회차 상품
@@ -364,7 +367,10 @@ def apply(current_user_id):
 
 #user DB받아서 연속 출석일 계산하기
 def calcConsecutiveAttendance(user):
-    attendanceList = user['attendanceList']
+    attendanceList = user.get('attendanceList', [])
+    if not attendanceList:
+        return 0;
+
     attendanceList.sort(key=lambda x: x['dateTime'])
     
     lastAttendedDay = datetime.datetime.today()
