@@ -1,14 +1,17 @@
-import requests
-
-from bs4 import BeautifulSoup
 from pymongo import MongoClient
-
+from bson import ObjectId
 
 client = MongoClient('localhost', 27017)
-db = client.miniproject
+db = client.junglegame
 
-db.users.insert_one({'name':'bobby','age':21})
-db.users.insert_one({'name':'kay','age':27})
-db.users.insert_one({'name':'john','age':30})
+def create_user(userdoc):
+    db.user.insert_one(userdoc)
 
+def find_id(id):
+    return db.user.find_one({'id':id})
 
+def store_refresh_token(tokendoc):
+    db.token.insert_one(tokendoc)
+
+def is_refresh_token_valid(jti):
+    return db.token.find_one({'jti':jti})

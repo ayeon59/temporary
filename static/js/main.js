@@ -8,22 +8,15 @@ function fireConfetti() {
 
 
 //유저가 도전권을 사용하여 도전한 경우 작동하는 함수
-function guessMoney(id){
+function guessMoney(){
     popupSuccess();
     fireConfetti();
     let money = $("#user-input-money").val()
-    
     $.ajax({
         type:"POST",
         url:"/apply",
-        data:{appPrice:money ,userId:id},
+        data:{appPrice:money},
 
-        beforeSend: function (xhr) {
-            const token = localStorage.getItem('jwt_token');
-            if (token) {
-                xhr.setRequestHeader('Authorization', token);
-            }
-        },
         error: function (xhr) {
            // xhr.responseJSON
         },
@@ -45,9 +38,9 @@ function guessMoney(id){
 function updateTicketCount() {
     $.ajax({
         type: 'GET',
-        url: '/api/ticket',
+        url: '/getTicketCount',
         success: function (response) {
-            document.getElementById("ticket-count").innerText = `보유 도전권: ${response.ticket}개`;
+            document.getElementById("ticket-count").innerText = `보유 도전권: ${response.appTicket}개`;
         }
     });
 }
