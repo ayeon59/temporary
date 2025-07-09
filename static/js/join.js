@@ -6,15 +6,15 @@ function checkIdDuplicate(){
 
     $.ajax({
         type:'POST',
-        url:"/api/checkDuplicate",
+        url:"/checkid",
         
         data:{id:user_id},
         success:function(response){
             if (response.result === 'success') {
-                alert("사용 가능한 아이디입니다!");
+                alert("response.msg");
                 isIdAvailable = true;
             } else {
-                alert("이미 사용 중인 아이디입니다.");
+                alert("response.msg");
                 isIdAvailable = false;
             }
         }
@@ -46,7 +46,7 @@ function postMember() {
     
     $.ajax({
         type: 'POST',
-        url: "/api/newMember",
+        url: "/signup",
         data: {
             name: new_name,
             id: new_id,
@@ -64,49 +64,31 @@ function postMember() {
     });
 }
 //로그인 성공한 경우 서버에 유저에 대한 정보넘김 
-//특정 사람에 대한 정보를 보여주기 위함
 function loginSuccess(){
     let user_id = $("#user-id").val()
     let user_password = $("#user-password").val()
 
     $.ajax({
         type:'POST',
-        url:"/api/loginSuccess",
-        
+        url:"/login",
         data:{id:user_id , pw:user_password},
         success:function(response){
             if (response.result === 'success') {
-                alert("로그인 성공!");   
+                alert("로그인 성공🔥!");   
+                location.href = "main.html";
             } else {
                 alert("로그인 실패");        
             }
-        }
-
-    })
-
-}
-
-//기존회원임을 확인하는 함수
-
-function handleLogin(){
-    let user_id = $("#user-id").val()
-    let user_password = $("#user-password").val()
-
-    $.ajax({
-        type:'POST',
-        url:"/api/loginTry",
-        
-        data:{id:user_id},
-        success:function(response){
-            if (response.result === 'success') {
-                alert("로그인 성공!");
-                loginSuccess();       
-                location.href = "main.html";      
-            } else {
-                alert("로그인 실패");        
+        },
+        complete: function (xhr) {
+            const token = xhr.getResponseHeader('Authorization');
+            if (token) {
+                localStorage.setItem('jwt_token', token);
             }
         }
-
-    })
+    });
 }
+
+
+
 
