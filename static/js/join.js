@@ -5,16 +5,16 @@ function checkIdDuplicate(){
     let user_id = $("#new-id-check-btn").val()
 
     $.ajax({
-        type:'POST',
+        type:'GET',
         url:"/checkid",
         
         data:{id:user_id},
         success:function(response){
             if (response.result === 'success') {
-                alert("response.msg");
+                alert(response.msg);
                 isIdAvailable = true;
             } else {
-                alert("response.msg");
+                alert(response.msg);
                 isIdAvailable = false;
             }
         }
@@ -56,7 +56,7 @@ function postMember() {
         success: function (response) {
             if (response.result === 'success') {
                 alert("회원가입 성공!");
-                location.href = "login.html";
+                location.href = "/login";
             } else {
                 alert("회원가입 실패");
             }
@@ -74,8 +74,8 @@ function loginSuccess(){
         data:{id:user_id , pw:user_password},
         success:function(response){
             if (response.result === 'success') {
-                alert("로그인 성공🔥!");   
-                location.href = "main.html";
+                alert("로그인 성공🔥!");  
+                loginPass(); 
             } else {
                 alert("로그인 실패");        
             }
@@ -87,6 +87,33 @@ function loginSuccess(){
             }
         }
     });
+}
+
+function loginPass(){
+
+    $.ajax({
+        type:'GET',
+        url:"/main",
+        data:{},
+        beforeSend: function (xhr) {
+            const token = localStorage.getItem('jwt_token');
+            if (token) {
+                console.log(token)
+                xhr.setRequestHeader('Authorization', token);
+            }
+        },
+        error: function (xhr) {
+           // xhr.responseJSON
+        },
+        success:function(response){
+            console.log(response)
+            document.open
+            document.write(response)
+            document.close
+        },
+
+    });
+
 }
 
 
